@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kitty socials widget</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ff8fc2;--rose:#ff4d94}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:transparent;overflow:hidden;font-family:'Comfortaa','Nunito',system-ui,sans-serif;color:#8a2552}
+.wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center;padding:44px 40px 16px;overflow:hidden}
+.pop{position:relative;width:min(100%,520px);transition:transform 1s cubic-bezier(.2,1.3,.3,1),opacity .7s}
+.pop.hide{transform:translateY(60px) scale(.85);opacity:0}
+.ear{position:absolute;top:-34px;width:78px;height:70px;z-index:0;background:linear-gradient(160deg,#fff,var(--pink));clip-path:polygon(0 100%,50% 0,100% 100%);transform-origin:50% 100%}
+.ear::after{content:"";position:absolute;left:22%;top:34%;width:56%;height:58%;background:linear-gradient(180deg,#ffd0e5,var(--pink));clip-path:polygon(0 100%,50% 0,100% 100%)}
+.ear.l{left:46px;transform:rotate(-14deg);animation:twl 6s ease-in-out infinite}
+.ear.r{right:46px;transform:rotate(14deg);animation:twr 6s ease-in-out infinite .4s}
+@keyframes twl{0%,88%,100%{transform:rotate(-14deg)}92%{transform:rotate(-25deg)}96%{transform:rotate(-10deg)}}
+@keyframes twr{0%,88%,100%{transform:rotate(14deg)}92%{transform:rotate(25deg)}96%{transform:rotate(10deg)}}
+.whs{position:absolute;top:50%;width:44px;z-index:0}
+.whs.wl{left:-32px}.whs.wr{right:-32px}
+.whs i{display:block;height:3px;border-radius:3px;background:var(--rose);opacity:.55;margin:8px 0}
+.wl i{transform-origin:100% 50%}.wr i{transform-origin:0 50%}
+.wl i:nth-child(1){transform:rotate(12deg)}.wl i:nth-child(3){transform:rotate(-12deg)}
+.wr i:nth-child(1){transform:rotate(-12deg)}.wr i:nth-child(3){transform:rotate(12deg)}
+.frame{position:relative;z-index:1;padding:4px;border-radius:38px;background:linear-gradient(135deg,#fff 0%,color-mix(in srgb,var(--pink) 75%,#fff) 30%,#fff 55%,var(--pink) 80%,#fff 100%);background-size:260% 260%;animation:sheen 8s ease-in-out infinite;box-shadow:0 14px 40px color-mix(in srgb,var(--rose) 38%,transparent),0 0 30px color-mix(in srgb,var(--pink) 45%,transparent)}
+@keyframes sheen{50%{background-position:100% 100%}}
+.card{position:relative;overflow:hidden;border-radius:34px;padding:24px 30px 26px;text-align:center;background:radial-gradient(110% 120% at 85% 0%,color-mix(in srgb,var(--pink) 30%,#fff),transparent 60%),linear-gradient(160deg,rgba(255,244,249,.95),rgba(255,219,235,.94))}
+.card::after{content:"";position:absolute;top:-30%;left:-45%;width:30%;height:160%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:rotate(18deg);animation:ray 9s ease-in-out infinite;pointer-events:none}
+@keyframes ray{0%{left:-45%}40%,100%{left:130%}}
+.title{font-family:'Pacifico','Comfortaa',cursive;font-weight:400;font-size:36px;line-height:1.2;margin:0;white-space:nowrap;background:linear-gradient(180deg,var(--pink),var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #fff)}
+.subt{font-weight:700;font-size:18px;margin:2px 0 0;letter-spacing:.06em;opacity:.85}
+.rule{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px auto 14px;width:70%}
+.rule span{flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--pink))}
+.rule span:last-child{transform:scaleX(-1)}
+.rule i{font-style:normal;font-size:14px;color:var(--rose)}
+.list.rot{position:relative;height:58px}
+.list:not(.rot){display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;justify-content:center;gap:14px;opacity:0;transform:translateY(14px);transition:transform .7s cubic-bezier(.2,1,.3,1),opacity .7s}
+.rot .row{position:absolute;inset:0}
+.row.on{opacity:1;transform:none}
+.row.out{opacity:0;transform:translateY(-14px)}
+.ic{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--pink) 50%,#fff),var(--pink));box-shadow:0 4px 10px color-mix(in srgb,var(--rose) 30%,transparent)}
+.ic svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.h{font-size:24px;font-weight:700;color:var(--rose);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:380px;text-shadow:0 1px 0 #fff}
+.fl{position:absolute;bottom:8px;pointer-events:none;animation:floatup linear forwards}
+@keyframes floatup{0%{opacity:0;transform:translate(0,0)}15%{opacity:.9}100%{opacity:0;transform:translate(var(--dx),-240px) rotate(25deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="pop hide" id="pop">
+  <i class="ear l"></i><i class="ear r"></i>
+  <div class="whs wl"><i></i><i></i><i></i></div><div class="whs wr"><i></i><i></i><i></i></div>
+  <div class="frame"><div class="card" id="card">
+   <h1 class="title" id="title"></h1>
+   <p class="subt" id="subt"></p>
+   <div class="rule"><span></span><i>🐾</i><span></span></div>
+   <div class="list" id="list"></div>
+  </div></div>
+ </div>
+</div>
+<script>
+const ICONS = {
+  instagram:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.8" r=".6"/>',
+  youtube:'<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5l5 2.5-5 2.5z"/>',
+  telegram:'<path d="M21 4L3 11l6 2 2 6 3-4 5 3z"/><path d="M9 13l12-9"/>',
+  tiktok:'<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.3 2.4 1.9 4 4.5 4.2"/>',
+  x:'<path d="M4 4l16 16M20 4L4 20"/>',
+  discord:'<path d="M5 6c2-1.3 4-2 7-2s5 .7 7 2c1.5 3 2.2 6 2 10-1.5 1.2-3 1.8-4.5 2l-1-2c-1.8.5-3.2.5-5 0l-1 2c-1.5-.2-3-.8-4.5-2-.2-4 .5-7 2-10z"/><circle cx="9.5" cy="12" r="1.2"/><circle cx="14.5" cy="12" r="1.2"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'
+};
+const $ = id => document.getElementById(id);
+const T = new URLSearchParams(location.search).get("t");
+const DEF = {title:"Kitty", subtitle:"socials ♡", mode:"list", seconds:4, pink:"#ff8fc2", rose:"#ff4d94", visible:true,
+  items:[{p:"tiktok",h:"@kitty.stream"},{p:"instagram",h:"@kitty.stream"},{p:"telegram",h:"@kitty_chat"}]};
+let cfg = Object.assign({}, DEF, JSON.parse(localStorage.getItem("kt_so_cfg") || "{}"));
+let sig = "", rows = [], idx = 0, timer;
+
+function build(){
+  const s = JSON.stringify([cfg.items, cfg.mode, cfg.seconds]); if (s === sig) return; sig = s;
+  clearInterval(timer); const L = $("list"); L.innerHTML = ""; idx = 0;
+  L.className = "list" + (cfg.mode === "rotate" ? " rot" : "");
+  rows = cfg.items.map(it => {
+    const r = document.createElement("div"); r.className = "row";
+    r.innerHTML = `<span class="ic"><svg viewBox="0 0 24 24">${ICONS[it.p] || ICONS.link}</svg></span><span class="h"></span>`;
+    r.querySelector(".h").textContent = it.h; L.appendChild(r); return r;
+  });
+  if (!rows.length) return;
+  if (cfg.mode === "rotate"){
+    setTimeout(() => rows[0].classList.add("on"), 300);
+    if (rows.length > 1) timer = setInterval(() => {
+      const p = rows[idx]; p.classList.remove("on"); p.classList.add("out");
+      idx = (idx + 1) % rows.length; const n = rows[idx]; n.classList.remove("out"); void n.offsetWidth; n.classList.add("on");
+      setTimeout(() => p.classList.remove("out"), 800);
+    }, Math.max(2, cfg.seconds) * 1000);
+  } else rows.forEach((r, i) => setTimeout(() => r.classList.add("on"), 500 + i * 160));
+}
+function apply(c){
+  cfg = Object.assign({}, DEF, c); localStorage.setItem("kt_so_cfg", JSON.stringify(cfg));
+  const r = document.documentElement.style; r.setProperty("--pink", cfg.pink); r.setProperty("--rose", cfg.rose);
+  $("title").textContent = cfg.title; $("subt").textContent = cfg.subtitle;
+  build(); $("pop").classList.toggle("hide", !cfg.visible);
+}
+setInterval(() => {
+  const m = document.createElement("span"), ch = ["♥", "🐾", "✦", "♡"][Math.floor(Math.random() * 4)];
+  m.className = "fl"; m.textContent = ch;
+  m.style.cssText = `left:${6+Math.random()*88}%;font-size:${10+Math.random()*12}px;color:${Math.random()>.5?cfg.pink:cfg.rose};--dx:${(Math.random()-.5)*60}px;animation-duration:${4+Math.random()*3}s`;
+  $("card").appendChild(m); setTimeout(() => m.remove(), 7500);
+}, 600);
+setTimeout(() => apply(cfg), 200);
+
+if (T){
+  const es = new EventSource("https://ntfy.sh/" + encodeURIComponent(T + "-kso") + "/sse?since=12h");
+  es.onmessage = e => { try { const m = JSON.parse(e.data); if (m.event === "message") apply(JSON.parse(m.message)); } catch(_){} };
+}
+</script>
+</body>
+</html>

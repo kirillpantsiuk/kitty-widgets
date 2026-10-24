@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kitty likes widget</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ff8fc2;--rose:#ff4d94}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:transparent;overflow:hidden;font-family:'Comfortaa','Nunito',system-ui,sans-serif;color:#8a2552}
+.wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center;padding:44px 40px 16px;overflow:hidden}
+.pop{position:relative;width:min(100%,700px);transition:transform 1s cubic-bezier(.2,1.3,.3,1),opacity .7s}
+.pop.hide{transform:translateY(60px) scale(.85);opacity:0}
+.pop.bump{animation:bump .7s}
+@keyframes bump{40%{transform:scale(1.05)}}
+.ear{position:absolute;top:-34px;width:78px;height:70px;z-index:0;background:linear-gradient(160deg,#fff,var(--pink));clip-path:polygon(0 100%,50% 0,100% 100%);transform-origin:50% 100%}
+.ear::after{content:"";position:absolute;left:22%;top:34%;width:56%;height:58%;background:linear-gradient(180deg,#ffd0e5,var(--pink));clip-path:polygon(0 100%,50% 0,100% 100%)}
+.ear.l{left:46px;transform:rotate(-14deg);animation:twl 6s ease-in-out infinite}
+.ear.r{right:46px;transform:rotate(14deg);animation:twr 6s ease-in-out infinite .4s}
+@keyframes twl{0%,88%,100%{transform:rotate(-14deg)}92%{transform:rotate(-25deg)}96%{transform:rotate(-10deg)}}
+@keyframes twr{0%,88%,100%{transform:rotate(14deg)}92%{transform:rotate(25deg)}96%{transform:rotate(10deg)}}
+.whs{position:absolute;top:50%;width:44px;z-index:0}
+.whs.wl{left:-32px}.whs.wr{right:-32px}
+.whs i{display:block;height:3px;border-radius:3px;background:var(--rose);opacity:.55;margin:8px 0}
+.wl i{transform-origin:100% 50%}.wr i{transform-origin:0 50%}
+.wl i:nth-child(1){transform:rotate(12deg)}.wl i:nth-child(3){transform:rotate(-12deg)}
+.wr i:nth-child(1){transform:rotate(-12deg)}.wr i:nth-child(3){transform:rotate(12deg)}
+.frame{position:relative;z-index:1;padding:4px;border-radius:38px;background:linear-gradient(135deg,#fff 0%,color-mix(in srgb,var(--pink) 75%,#fff) 30%,#fff 55%,var(--pink) 80%,#fff 100%);background-size:260% 260%;animation:sheen 8s ease-in-out infinite;box-shadow:0 14px 40px color-mix(in srgb,var(--rose) 38%,transparent),0 0 30px color-mix(in srgb,var(--pink) 45%,transparent)}
+@keyframes sheen{50%{background-position:100% 100%}}
+.card{position:relative;overflow:hidden;border-radius:34px;padding:24px 32px 24px;text-align:center;background:radial-gradient(110% 120% at 85% 0%,color-mix(in srgb,var(--pink) 30%,#fff),transparent 60%),linear-gradient(160deg,rgba(255,244,249,.95),rgba(255,219,235,.94))}
+.card::after{content:"";position:absolute;top:-30%;left:-45%;width:30%;height:160%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:rotate(18deg);animation:ray 9s ease-in-out infinite;pointer-events:none}
+@keyframes ray{0%{left:-45%}40%,100%{left:130%}}
+.title{font-family:'Pacifico','Comfortaa',cursive;font-weight:400;font-size:38px;line-height:1.2;margin:0;white-space:nowrap;background:linear-gradient(180deg,var(--pink),var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #fff)}
+.subt{font-weight:700;font-size:19px;margin:2px 0 0;letter-spacing:.06em;opacity:.85}
+.count{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px}
+.heart{width:56px;height:56px;filter:drop-shadow(0 4px 6px color-mix(in srgb,var(--rose) 45%,transparent))}
+.heart.beat{animation:beat .5s}
+@keyframes beat{40%{transform:scale(1.3) rotate(-6deg)}}
+.num{font-weight:700;font-size:64px;line-height:1.1;background:linear-gradient(180deg,var(--pink),var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #fff)}
+.lbl{font-weight:700;font-size:20px;opacity:.85;margin-top:0}
+.goal{margin-top:16px}
+.gt{display:flex;justify-content:space-between;font-weight:700;font-size:19px;margin:0 6px 8px}
+.bar{height:22px;border-radius:99px;background:rgba(255,255,255,.85);border:2px solid color-mix(in srgb,var(--pink) 70%,#fff);padding:3px}
+.fill{position:relative;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--rose));transition:width 1.6s cubic-bezier(.2,1,.3,1)}
+.fill::before{content:"";position:absolute;inset:0;border-radius:99px;background:repeating-linear-gradient(115deg,rgba(255,255,255,.3) 0 10px,transparent 10px 20px);animation:stripes 1s linear infinite}
+@keyframes stripes{to{background-position:20px 0}}
+.tip{position:absolute;right:-10px;top:-11px;font-style:normal;font-size:24px;line-height:1;color:var(--rose);text-shadow:0 0 5px #fff,0 0 2px #fff;animation:tipb 1.2s ease-in-out infinite}
+@keyframes tipb{50%{transform:scale(1.25)}}
+.cele{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:34px;background:radial-gradient(circle,#fff6fa,#ffc6df);opacity:0;pointer-events:none;transition:opacity .7s}
+.cele.on{opacity:1}
+.cele>div{position:relative}
+.ring{position:absolute!important;left:50%;top:50%;width:230px;height:230px;margin:-115px 0 0 -115px;border-radius:50%;border:3px solid var(--rose);opacity:0}
+.cele.on .ring{animation:bloom 2.2s ease-out 3}
+.cele.on .ring.r2{animation-delay:.5s}
+@keyframes bloom{from{transform:scale(.2);opacity:.9}to{transform:scale(2.6);opacity:0}}
+.cat{font-size:54px;line-height:1;animation:hop .6s ease-in-out infinite alternate}
+@keyframes hop{to{transform:translateY(-12px) rotate(6deg)}}
+.c1{font-family:'Pacifico','Comfortaa',cursive;font-size:40px;margin-top:4px;background:linear-gradient(180deg,var(--pink),var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #fff)}
+.c2{font-weight:700;font-size:22px;margin-top:4px}
+.c3{font-weight:700;font-size:30px;margin-top:6px;color:var(--rose)}
+.fx{position:absolute;top:-40px;pointer-events:none;z-index:9;text-shadow:0 0 4px rgba(255,255,255,.9);animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),calc(100vh + 80px)) rotate(var(--r))}}
+.fl{position:absolute;bottom:8px;pointer-events:none;animation:floatup linear forwards}
+@keyframes floatup{0%{opacity:0;transform:translate(0,0)}15%{opacity:.9}100%{opacity:0;transform:translate(var(--dx),-240px) rotate(25deg)}}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+ <div class="pop hide" id="pop">
+  <i class="ear l"></i><i class="ear r"></i>
+  <div class="whs wl"><i></i><i></i><i></i></div><div class="whs wr"><i></i><i></i><i></i></div>
+  <div class="frame"><div class="card" id="card">
+   <h1 class="title" id="title"></h1>
+   <p class="subt" id="subt"></p>
+   <div class="count">
+    <svg class="heart" id="heart" viewBox="0 0 24 24"><defs><linearGradient id="kg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb0d3"/><stop offset="1" stop-color="#ff3d8b"/></linearGradient></defs><path fill="url(#kg)" stroke="#fff" stroke-width="1.2" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><ellipse cx="7.6" cy="7.4" rx="2" ry="1.2" fill="#fff" opacity=".7" transform="rotate(-30 7.6 7.4)"/></svg>
+    <div class="num" id="num">0</div>
+   </div>
+   <div class="lbl" id="lbl"></div>
+   <div class="goal"><div class="gt"><span id="gname"></span><span id="gnum"></span></div><div class="bar"><div class="fill" id="fill"><i class="tip">♥</i></div></div></div>
+   <div class="cele" id="cele"><div class="ring"></div><div class="ring r2"></div><div class="cat">🐱</div><div class="c1" id="c1"></div><div class="c2" id="c2"></div><div class="c3" id="c3"></div></div>
+  </div></div>
+ </div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const T = new URLSearchParams(location.search).get("t");
+const DEF = {title:"Kitty", subtitle:"stream ♡", label:"лайков на эфире", goalTitle:"Цель", target:10000, step:5000, autoNext:true,
+  celeTitle:"Ура! Цель достигнута!", celeSub:"Мур, вы самые лучшие!", remainText:"осталось", pink:"#ff8fc2", rose:"#ff4d94", visible:true, direct:true, test:0};
+let cfg = Object.assign({}, DEF, JSON.parse(localStorage.getItem("kt_lk_cfg") || "{}"));
+let total = +localStorage.getItem("kt_lk_total") || 0, shown = 0, lastLevel = 0, lastTest = 0, ready = false, ct;
+const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u2009");
+
+function lv(){
+  const auto = cfg.autoNext && cfg.step > 0, tg = Math.max(1, cfg.target);
+  const level = total >= tg ? (auto ? Math.floor((total - tg) / cfg.step) + 1 : 1) : 0;
+  return { level, eff: auto ? tg + level * cfg.step : tg, prev: auto && level > 0 ? tg + (level - 1) * cfg.step : 0,
+           reached: level > 0 ? (auto ? tg + (level - 1) * cfg.step : tg) : 0 };
+}
+function render(){
+  const L = lv();
+  $("gname").textContent = cfg.goalTitle + ": " + fmt(L.eff);
+  const pct = Math.max(0, Math.min(100, (total - L.prev) / ((L.eff - L.prev) || 1) * 100));
+  $("gnum").textContent = cfg.remainText + " " + fmt(Math.max(0, L.eff - total)) + " ♥";
+  $("fill").style.width = pct + "%";
+  if (L.level > lastLevel){ const r = L.reached; if (ready) setTimeout(() => celebrate(r), 1200); lastLevel = L.level; }
+  else if (L.level < lastLevel) lastLevel = L.level;
+}
+function setLikes(n){
+  if (n > total){ const h = $("heart"); h.classList.remove("beat"); void h.getBoundingClientRect(); h.classList.add("beat"); }
+  total = n; localStorage.setItem("kt_lk_total", n); render();
+}
+function celebrate(goal){
+  $("c1").textContent = cfg.celeTitle; $("c2").textContent = cfg.celeSub; $("c3").textContent = "♥ " + fmt(goal);
+  $("cele").classList.add("on");
+  const p = $("pop"); p.classList.remove("bump"); void p.offsetWidth; p.classList.add("bump");
+  confetti(70);
+  clearTimeout(ct); ct = setTimeout(() => $("cele").classList.remove("on"), 7500);
+}
+function confetti(n){
+  const sh = ["♥", "♥", "🐾", "✦", "♡"], cols = [cfg.pink, cfg.rose, "#fff", "#ffb3d4", "#c9a7ff"];
+  for (let i = 0; i < n; i++) setTimeout(() => {
+    const e = document.createElement("span"); e.className = "fx"; e.textContent = sh[i % 5];
+    e.style.cssText = `left:${Math.random()*100}%;color:${cols[i%5]};font-size:${16+Math.random()*20}px;--dx:${(Math.random()-.5)*240}px;--r:${(Math.random()-.5)*720}deg;animation-duration:${3.5+Math.random()*3}s`;
+    $("wrap").appendChild(e); setTimeout(() => e.remove(), 7000);
+  }, i * 60);
+}
+function apply(c){
+  cfg = Object.assign({}, DEF, c); localStorage.setItem("kt_lk_cfg", JSON.stringify(cfg));
+  const r = document.documentElement.style; r.setProperty("--pink", cfg.pink); r.setProperty("--rose", cfg.rose);
+  $("title").textContent = cfg.title; $("subt").textContent = cfg.subtitle; $("lbl").textContent = cfg.label;
+  $("pop").classList.toggle("hide", !cfg.visible);
+  if (cfg.test && cfg.test !== lastTest){ lastTest = cfg.test; if (ready) celebrate(lv().reached || cfg.target); }
+  render();
+}
+(function loop(){
+  const d = total - shown;
+  if (d){ const s = Math.max(1, Math.ceil(Math.abs(d) * .08)); shown += Math.sign(d) * Math.min(s, Math.abs(d)); $("num").textContent = fmt(shown); }
+  requestAnimationFrame(loop);
+})();
+setInterval(() => {
+  const m = document.createElement("span"), ch = ["♥", "♥", "✦", "🐾"][Math.floor(Math.random() * 4)];
+  m.className = "fl"; m.textContent = ch;
+  m.style.cssText = `left:${6+Math.random()*88}%;font-size:${10+Math.random()*12}px;color:${Math.random()>.5?cfg.pink:cfg.rose};--dx:${(Math.random()-.5)*60}px;animation-duration:${4+Math.random()*3}s`;
+  $("card").appendChild(m); setTimeout(() => m.remove(), 7500);
+}, 600);
+setTimeout(() => apply(cfg), 200);
+
+/* Прямое подключение к TikFinity (WebSocket) */
+function direct(){
+  try {
+    const ws = new WebSocket("ws://127.0.0.1:21213/");
+    ws.onmessage = e => { if (!cfg.direct) return; try {
+      const m = JSON.parse(e.data);
+      if (m.event === "like"){ const d = m.data || {};
+        if (typeof d.totalLikeCount === "number") setLikes(d.totalLikeCount); else if (d.likeCount) setLikes(total + d.likeCount); }
+    } catch(_){} };
+    ws.onclose = () => setTimeout(direct, 5000);
+    ws.onerror = () => ws.close();
+  } catch(_){ setTimeout(direct, 5000); }
+}
+direct();
+
+/* Подписка на пульт через ntfy.sh */
+function sub(topic, since, fn){
+  const es = new EventSource("https://ntfy.sh/" + encodeURIComponent(topic) + "/sse?since=" + since);
+  es.onmessage = e => { try { const m = JSON.parse(e.data); if (m.event === "message") fn(JSON.parse(m.message)); } catch(_){} };
+}
+if (T){
+  sub(T + "-klk", "12h", apply);
+  sub(T + "-klv", "10m", d => { if (typeof d.total === "number") setLikes(d.total); });
+}
+setTimeout(() => ready = true, 2500);
+</script>
+</body>
+</html>

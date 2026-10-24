@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пульт Kitty: лайки и соцсети 🐾</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff0f5;color:#8a2552;font-family:'Comfortaa',system-ui,sans-serif;padding:16px;max-width:640px;margin-inline:auto}
+h1{font-size:22px;margin:4px 0 12px;color:#ff4d94;text-align:center}
+h2{font-size:16px;margin:26px 0 8px;color:#ff4d94;border-bottom:2px dashed #ffb3d4;padding-bottom:6px}
+label{display:block;font-size:13px;font-weight:700;opacity:.85;margin:10px 0 4px}
+input[type=text],input[type=number],textarea,select{width:100%;padding:11px 12px;border-radius:14px;border:2px solid #ffccd5;background:#fff;color:#8a2552;font-size:15px;font-family:inherit;outline:none}
+input:focus,textarea:focus,select:focus{border-color:#ff4d94}
+textarea{min-height:96px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1}
+input[type=color]{width:100%;height:44px;border:2px solid #ffccd5;border-radius:14px;background:#fff;padding:3px;cursor:pointer}
+button{padding:12px 14px;border:0;border-radius:14px;font-size:15px;font-weight:700;color:#fff;background:#ff8fc2;cursor:pointer;font-family:inherit;transition:transform .1s,background .2s}
+button:hover{background:#ff4d94}
+button:active{transform:scale(.97)}
+button.main{background:linear-gradient(90deg,#ff8fc2,#ff4d94);color:#fff;width:100%;padding:14px;font-size:16px;margin-top:14px;box-shadow:0 4px 12px rgba(255,77,148,.3)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.btns button{flex:1;min-width:110px}
+.box{background:#fff;border:2px solid #ffccd5;border-radius:14px;padding:10px 12px;font-size:13px;word-break:break-all;margin-top:6px}
+.box button{margin-top:8px;padding:8px 12px;font-size:13px}
+#status{position:sticky;top:0;z-index:9;padding:10px 14px;border-radius:14px;background:#fff;font-size:14px;font-weight:700;margin-bottom:8px;border:2px solid #ffb3d4;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.05)}
+.chk{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:#ff4d94}
+.hint{font-size:12px;opacity:.8;margin:6px 0 0;line-height:1.4}
+.big{font-size:28px;font-weight:700;color:#ff4d94}
+</style>
+</head>
+<body>
+<h1>Пульт Kitty: лайки и соцсети 🐾</h1>
+<div id="status">Готов ✨</div>
+
+<h2>Ссылки</h2>
+<label>Виджет лайков Kitty (Link в TikTok LIVE Studio)</label>
+<div class="box"><span id="l1"></span><br><button onclick="copy('l1')">Копировать</button></div>
+<label>Виджет соцсетей Kitty (Link в TikTok LIVE Studio)</label>
+<div class="box"><span id="l2"></span><br><button onclick="copy('l2')">Копировать</button></div>
+<label>Этот пульт на телефоне</label>
+<div class="box"><span id="l3"></span><br><button onclick="copy('l3')">Копировать</button></div>
+
+<h2>Счётчик лайков с эфира 🐱</h2>
+<p class="hint">Нужен TikFinity Desktop на этом же ПК (подключён к вашему TikTok и в эфире). Откройте пульт на этом ПК, нажмите кнопку и разрешите доступ к локальной сети. Вкладку держите открытой.</p>
+<div class="btns"><button onclick="bridge()">Подключить TikFinity</button></div>
+<label>Лайки сейчас</label><div class="big" id="btotal">0</div>
+<p class="hint" id="bstat">Не подключено</p>
+<label>Задать вручную</label>
+<div class="row"><input type="number" id="manual" placeholder="например 1200"><button onclick="setManual()">Установить</button></div>
+<div class="btns"><button onclick="addManual(100)">+100 ♥</button><button onclick="addManual(1000)">+1000 ♥</button><button onclick="addManual(5000)">+5000 ♥</button></div>
+
+<h2>Виджет лайков Kitty</h2>
+<label>Название</label><input type="text" data-w="L" data-k="title">
+<label>Подпись под названием</label><input type="text" data-w="L" data-k="subtitle">
+<label>Текст под числом</label><input type="text" data-w="L" data-k="label">
+<label>Название цели</label><input type="text" data-w="L" data-k="goalTitle">
+<div class="row">
+  <div><label>Цель (лайков)</label><input type="number" data-w="L" data-k="target"></div>
+  <div><label>Следующая цель на +</label><input type="number" data-w="L" data-k="step"></div>
+</div>
+<label class="chk"><input type="checkbox" data-w="L" data-k="autoNext"> Автоматически ставить следующую цель</label>
+<label class="chk"><input type="checkbox" data-w="L" data-k="direct"> Виджет сам слушает TikFinity</label>
+<label>Слово перед остатком</label><input type="text" data-w="L" data-k="remainText">
+<label>Заголовок уведомления</label><input type="text" data-w="L" data-k="celeTitle">
+<label>Текст уведомления</label><input type="text" data-w="L" data-k="celeSub">
+<div class="row">
+  <div><label>Основной цвет</label><input type="color" data-w="L" data-k="pink"></div>
+  <div><label>Акцентный цвет</label><input type="color" data-w="L" data-k="rose"></div>
+</div>
+<button class="main" onclick="send('L')">Применить на эфире 💖</button>
+<div class="btns">
+  <button onclick="send('L',{visible:true})">Показать</button>
+  <button onclick="send('L',{visible:false})">Скрыть</button>
+  <button onclick="send('L',{test:Date.now()})">Проверить уведомление 🎉</button>
+</div>
+
+<h2>Виджет соцсетей Kitty</h2>
+<label>Название</label><input type="text" data-w="S" data-k="title">
+<label>Подпись под названием</label><input type="text" data-w="S" data-k="subtitle">
+<label>Соцсети (сеть и ник)</label>
+<textarea data-w="S" data-k="itemsText"></textarea>
+<p class="hint">Доступные иконки: tiktok, instagram, youtube, telegram, x, discord. Пример: <b>telegram @kitty_chat</b></p>
+<div class="row">
+  <div><label>Показ</label><select data-w="S" data-k="mode"><option value="list">Все списком</option><option value="rotate">По одной</option></select></div>
+  <div><label>Секунд на одну</label><input type="number" data-w="S" data-k="seconds"></div>
+</div>
+<div class="row">
+  <div><label>Основной цвет</label><input type="color" data-w="S" data-k="pink"></div>
+  <div><label>Акцентный цвет</label><input type="color" data-w="S" data-k="rose"></div>
+</div>
+<button class="main" onclick="send('S')">Применить на эфире 💖</button>
+<div class="btns">
+  <button onclick="send('S',{visible:true})">Показать</button>
+  <button onclick="send('S',{visible:false})">Скрыть</button>
+</div>
+
+<script>
+const D = {
+  L:{title:"Kitty", subtitle:"stream ♡", label:"лайков на эфире", goalTitle:"Цель", target:10000, step:5000, autoNext:true,
+     celeTitle:"Ура! Цель достигнута!", celeSub:"Мур, вы самые лучшие!", remainText:"осталось", pink:"#ff8fc2", rose:"#ff4d94", visible:true, direct:true, test:0},
+  S:{title:"Kitty", subtitle:"socials ♡", mode:"list", seconds:4, pink:"#ff8fc2", rose:"#ff4d94", visible:true,
+     itemsText:"tiktok @kitty.stream\ninstagram @kitty.stream\ntelegram @kitty_chat"}
+};
+const SUF = {L:"-klk", S:"-kso"};
+const $ = id => document.getElementById(id);
+const q = new URLSearchParams(location.search);
+const T = q.get("t") || localStorage.getItem("kt_topic") || ("kt-" + Math.random().toString(36).slice(2, 12));
+localStorage.setItem("kt_topic", T);
+const st = {
+  L:Object.assign({}, D.L, JSON.parse(localStorage.getItem("kt_sL_" + T) || "{}")),
+  S:Object.assign({}, D.S, JSON.parse(localStorage.getItem("kt_sS_" + T) || "{}"))
+};
+
+// Функция создания динамических ссылок
+const base = u => new URL(u, location.href).href;
+
+$("l1").textContent = base("kitty-likes.html?t=" + T);
+$("l2").textContent = base("kitty-socials.html?t=" + T);
+$("l3").textContent = location.href.split("?")[0] + "?t=" + T;
+
+document.querySelectorAll("[data-w]").forEach(el => {
+  const v = st[el.dataset.w][el.dataset.k];
+  if (el.type === "checkbox") el.checked = !!v; else el.value = v;
+});
+
+function read(w){
+  document.querySelectorAll(`[data-w="${w}"]`).forEach(el => {
+    const k = el.dataset.k;
+    st[w][k] = el.type === "checkbox" ? el.checked : el.type === "number" ? (Number(el.value) || 0) : el.value;
+  });
+  if (w === "S") st.S.items = st.S.itemsText.split("\n").map(x => x.trim()).filter(Boolean).map(l => {
+    const [p, ...r] = l.split(/\s+/); const known = ["tiktok","instagram","youtube","telegram","x","discord"].includes(p.toLowerCase());
+    return known && r.length ? { p:p.toLowerCase(), h:r.join(" ") } : { p:"link", h:l };
+  });
+}
+
+function status(t, ok){ const e = $("status"); e.textContent = t; e.style.color = ok === false ? "#d90429" : "#ff4d94"; }
+
+async function post(suffix, obj){
+  const r = await fetch("https://ntfy.sh/" + encodeURIComponent(T + suffix), { method:"POST", body:JSON.stringify(obj) });
+  if (!r.ok) throw new Error(r.status);
+}
+
+async function send(w, extra){
+  read(w); Object.assign(st[w], extra || {});
+  localStorage.setItem("kt_s" + w + "_" + T, JSON.stringify(st[w]));
+  try { await post(SUF[w], st[w]); status("Отправлено ✨ " + new Date().toLocaleTimeString()); }
+  catch (e) { status("Ошибка отправки (" + e.message + ")", false); }
+}
+
+async function pushLikes(n){
+  try { await post("-klv", { total:n }); status("Лайки отправлены 🐾 " + n); }
+  catch (e) { status("Ошибка отправки (" + e.message + ")", false); }
+}
+
+let manual = 0;
+function setManual(){ manual = Math.max(0, Number($("manual").value) || 0); $("btotal").textContent = manual; pushLikes(manual); }
+function addManual(n){ manual += n; $("manual").value = manual; $("btotal").textContent = manual; pushLikes(manual); }
+function copy(id){ navigator.clipboard.writeText($(id).textContent).then(() => status("Скопировано 🐾")); }
+
+/* Мост TikFinity -> виджет */
+let bws, btotal = 0, dirty = false, started = false;
+function bridge(){
+  if (started) return; started = true; connect();
+  setInterval(() => { if (dirty){ dirty = false; post("-klv", { total:btotal }).catch(() => { dirty = true; }); } }, 5000);
+}
+
+function connect(){
+  try {
+    bws = new WebSocket("ws://127.0.0.1:21213/");
+    bws.onopen = () => $("bstat").textContent = "Подключено к TikFinity 🐾 Ждём лайки";
+    bws.onmessage = e => { try {
+      const m = JSON.parse(e.data);
+      if (m.event === "like"){ const d = m.data || {};
+        if (typeof d.totalLikeCount === "number") btotal = d.totalLikeCount; else btotal += d.likeCount || 0;
+        $("btotal").textContent = btotal; dirty = true; }
+    } catch(_){} };
+    bws.onclose = () => { $("bstat").textContent = "Нет связи с TikFinity. Повтор через 5 с"; setTimeout(connect, 5000); };
+    bws.onerror = () => bws.close();
+  } catch (e) { $("bstat").textContent = "Ошибка: " + e.message; setTimeout(connect, 5000); }
+}
+</script>
+</body>
+</html>
