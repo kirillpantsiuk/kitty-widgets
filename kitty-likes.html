@@ -147,7 +147,7 @@ setInterval(() => {
 }, 600);
 setTimeout(() => apply(cfg), 200);
 
-/* Прямое подключение к TikFinity (WebSocket) */
+/* Прямое подключение к TikFinity (если запущен на этом же ПК) */
 function direct(){
   try {
     const ws = new WebSocket("ws://127.0.0.1:21213/");
@@ -162,7 +162,7 @@ function direct(){
 }
 direct();
 
-/* Подписка на пульт через ntfy.sh */
+/* Настройки и счётчик с пульта через ntfy.sh */
 function sub(topic, since, fn){
   const es = new EventSource("https://ntfy.sh/" + encodeURIComponent(topic) + "/sse?since=" + since);
   es.onmessage = e => { try { const m = JSON.parse(e.data); if (m.event === "message") fn(JSON.parse(m.message)); } catch(_){} };
