@@ -10,7 +10,11 @@
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:transparent;overflow:hidden;font-family:'Comfortaa','Nunito',system-ui,sans-serif;color:#8a2552}
 .wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center;padding:44px 40px 16px;overflow:hidden}
-.pop{position:relative;width:min(100%,520px);transition:transform 1s cubic-bezier(.2,1.3,.3,1),opacity .7s}
+.pop{position:relative;width:min(100%,520px);transition:transform 1s cubic-bezier(.2,1.3,.3,1),opacity .7s,filter .7s}
+.pop.fade{opacity:0;filter:blur(10px);transform:translateY(-34px) scale(.93);transition:transform 1.6s ease-in,opacity 1.6s ease-in,filter 1.6s ease-in}
+.dst{position:absolute;pointer-events:none;z-index:9;text-shadow:0 0 4px #fff;animation:dst 1.7s ease-out forwards}
+@keyframes dst{0%{opacity:0;transform:translate(0,0) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.1)}}
+
 .pop.hide{transform:translateY(60px) scale(.85);opacity:0}
 .ear{position:absolute;top:-34px;width:78px;height:70px;z-index:0;background:linear-gradient(160deg,#fff,var(--pink));clip-path:polygon(0 100%,50% 0,100% 100%);transform-origin:50% 100%}
 .ear::after{content:"";position:absolute;left:22%;top:34%;width:56%;height:58%;background:linear-gradient(180deg,#ffd0e5,var(--pink));clip-path:polygon(0 100%,50% 0,100% 100%)}
@@ -74,7 +78,7 @@ const ICONS = {
 };
 const $ = id => document.getElementById(id);
 const T = new URLSearchParams(location.search).get("t");
-const DEF = {title:"Kitty", subtitle:"stream ♡", mode:"list", seconds:4, pink:"#ff8fc2", rose:"#ff4d94", visible:true,
+const DEF = {title:"Kitty", subtitle:"stream ♡", mode:"list", seconds:4, showFor:20, hideFor:10, pink:"#ff8fc2", rose:"#ff4d94", visible:true,
   items:[{p:"tiktok",h:"@kitty.stream"},{p:"instagram",h:"@kitty.stream"},{p:"telegram",h:"@kitty_stream"}]};
 let cfg = Object.assign({}, DEF, JSON.parse(localStorage.getItem("kt_so_cfg") || "{}"));
 let sig = "", rows = [], idx = 0, timer;
@@ -98,11 +102,30 @@ function build(){
     }, Math.max(2, cfg.seconds) * 1000);
   } else rows.forEach((r, i) => setTimeout(() => r.classList.add("on"), 500 + i * 160));
 }
+function dust(){
+  const W = document.querySelector(".wrap"), r = $("card").getBoundingClientRect(), w = W.getBoundingClientRect();
+  const ch = ["♥", "♥", "✦", "🐾", "♡"];
+  for (let i = 0; i < 30; i++){
+    const d = document.createElement("span");
+    d.className = "dst"; d.textContent = ch[i % 5];
+    d.style.cssText = `left:${r.left - w.left + Math.random() * r.width}px;top:${r.top - w.top + Math.random() * r.height}px;font-size:${10+Math.random()*14}px;color:${Math.random()>.5?cfg.pink:cfg.rose};--dx:${(Math.random()-.5)*130}px;--dy:${-60 - Math.random()*130}px;animation-delay:${Math.random()*.6}s`;
+    W.appendChild(d); setTimeout(() => d.remove(), 2600);
+  }
+}
+let cycT, csig = "";
+function out(){ $("pop").classList.add("fade"); dust(); cycT = setTimeout(back, Math.max(1, cfg.hideFor) * 1000 + 1700); }
+function back(){ sig = ""; build(); $("pop").classList.remove("fade"); cycT = setTimeout(out, Math.max(3, cfg.showFor) * 1000 + 1200); }
+function schedule(){
+  const s = [cfg.showFor, cfg.hideFor, cfg.visible].join();
+  if (s === csig) return; csig = s;
+  clearTimeout(cycT); $("pop").classList.remove("fade");
+  if (cfg.visible && cfg.showFor > 0) cycT = setTimeout(out, cfg.showFor * 1000 + 1200);
+}
 function apply(c){
   cfg = Object.assign({}, DEF, c); localStorage.setItem("kt_so_cfg", JSON.stringify(cfg));
   const r = document.documentElement.style; r.setProperty("--pink", cfg.pink); r.setProperty("--rose", cfg.rose);
   $("title").textContent = cfg.title; $("subt").textContent = cfg.subtitle;
-  build(); $("pop").classList.toggle("hide", !cfg.visible);
+  build(); $("pop").classList.toggle("hide", !cfg.visible); schedule();
 }
 setInterval(() => {
   const m = document.createElement("span"), ch = ["♥", "♥", "✦", "🐾"][Math.floor(Math.random() * 4)];

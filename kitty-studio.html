@@ -52,6 +52,7 @@ button.main{background:linear-gradient(90deg,#ff8fc2,#ff4d94);width:100%;padding
 <label>Подпись под названием</label><input type="text" data-w="L" data-k="subtitle">
 <label>Текст под числом</label><input type="text" data-w="L" data-k="label">
 <label>Название цели</label><input type="text" data-w="L" data-k="goalTitle">
+<label>Вид полосы цели</label><select data-w="L" data-k="barStyle"><option value="classic">Как раньше (с украшением)</option><option value="strip">Тонкая полоска с делениями</option></select>
 <div class="row">
   <div><label>Цель (лайков)</label><input type="number" data-w="L" data-k="target"></div>
   <div><label>Следующая цель на +</label><input type="number" data-w="L" data-k="step"></div>
@@ -83,6 +84,11 @@ button.main{background:linear-gradient(90deg,#ff8fc2,#ff4d94);width:100%;padding
   <div><label>Секунд на одну</label><input type="number" data-w="S" data-k="seconds"></div>
 </div>
 <div class="row">
+  <div><label>Показывать, сек. (0 = всегда)</label><input type="number" data-w="S" data-k="showFor"></div>
+  <div><label>Пауза до появления, сек.</label><input type="number" data-w="S" data-k="hideFor"></div>
+</div>
+<p class="hint">Виджет покажется на заданное время, красиво растворится и снова появится после паузы.</p>
+<div class="row">
   <div><label>Розовый</label><input type="color" data-w="S" data-k="pink"></div>
   <div><label>Акцент</label><input type="color" data-w="S" data-k="rose"></div>
 </div>
@@ -95,8 +101,8 @@ button.main{background:linear-gradient(90deg,#ff8fc2,#ff4d94);width:100%;padding
 <script>
 const D = {
   L:{title:"Kitty", subtitle:"stream ♡", label:"лайков на эфире", goalTitle:"Цель", target:10000, step:5000, autoNext:true,
-     celeTitle:"Ура! Цель достигнута!", celeSub:"Мур, вы самые лучшие!", remainText:"осталось", pink:"#ff8fc2", rose:"#ff4d94", visible:true, direct:true, test:0},
-  S:{title:"Kitty", subtitle:"stream ♡", mode:"list", seconds:4, pink:"#ff8fc2", rose:"#ff4d94", visible:true,
+     celeTitle:"Ура! Цель достигнута!", celeSub:"Мур, вы самые лучшие!", remainText:"осталось", barStyle:"classic", pink:"#ff8fc2", rose:"#ff4d94", visible:true, direct:true, test:0},
+  S:{title:"Kitty", subtitle:"stream ♡", mode:"list", seconds:4, showFor:20, hideFor:10, pink:"#ff8fc2", rose:"#ff4d94", visible:true,
      itemsText:"tiktok @kitty.stream\ninstagram @kitty.stream\ntelegram @kitty_stream"}
 };
 const SUF = {L:"-klk", S:"-kso"};
