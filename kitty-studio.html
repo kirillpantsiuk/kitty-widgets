@@ -35,6 +35,9 @@ button.main{background:linear-gradient(90deg,#ff8fc2,#ff4d94);width:100%;padding
 <div class="box"><span id="l1"></span><br><button onclick="copy('l1')">Копировать</button></div>
 <label>Виджет соцсетей (Link в TikTok LIVE Studio)</label>
 <div class="box"><span id="l2"></span><br><button onclick="copy('l2')">Копировать</button></div>
+<label>Виджет котика (Link в TikTok LIVE Studio)</label>
+<div class="box"><span id="l4"></span><br><button onclick="copy('l4')">Копировать</button></div>
+<p class="hint">Размер источника: ширина 520, высота = размер котика + 100 (например, 330 при размере 230). Шарфик виден только у сидящих котиков. Для котика с картинки подходят светлые цвета шерсти (чёрный закроет линии); узор, глаза, подмигивание и линия-край у него не меняются. У котиков из набора цвет, узор, глаза и аксессуары не меняются (они нарисованы в самих котиках), всё остальное работает.</p>
 <label>Этот пульт на телефоне</label>
 <div class="box"><span id="l3"></span><br><button onclick="copy('l3')">Копировать</button></div>
 
@@ -98,6 +101,54 @@ button.main{background:linear-gradient(90deg,#ff8fc2,#ff4d94);width:100%;padding
   <button onclick="send('S',{visible:false})">Скрыть</button>
 </div>
 
+<h2>🐱 Котик</h2>
+<p class="hint">Котик появляется на экране, машет лапкой, потом красиво исчезает и через паузу приходит снова.</p>
+<label>Тип котика</label>
+<select data-w="C" data-k="shape"><option value="ref">Ваш котик с картинки (подмигивает, машет лапкой)</option><option value="set">Котики из набора (6 разных)</option><option value="peeker">Выглядывает из-за края (машет лапкой)</option><option value="classic">Сидящий обычный</option><option value="chubby">Сидящий пухляш</option></select>
+<label class="chk"><input type="checkbox" data-w="C" data-k="wink"> Подмигивает (для типа «выглядывает»)</label>
+<label class="chk"><input type="checkbox" data-w="C" data-k="ledge"> Показывать линию-край (для типа «выглядывает»)</label>
+<label>Какой котик из набора (для типа «Котики из набора»)</label>
+<select data-w="C" data-k="setCat"><option value="all">Все по очереди</option><option value="random">Случайный каждый раз</option><option value="0">Рыжий с белым (сидит спиной)</option><option value="1">Полосатый (стоит)</option><option value="2">Спящий коричневый</option><option value="3">Серый (сидит, хвост вверх)</option><option value="4">Рыжий (идёт)</option><option value="5">Чёрно-белый (сидит)</option></select>
+<label>Цвет шерсти</label>
+<input type="color" data-w="C" data-k="coat">
+<div class="btns" id="coatSw"></div>
+<label>Узор</label>
+<select data-w="C" data-k="pattern"><option value="none">Без узора</option><option value="stripes">Полосатый</option><option value="spots">Пятнистый</option><option value="white">Белые лапки и грудка</option></select>
+<label>Цвет глаз</label>
+<input type="color" data-w="C" data-k="eyes">
+<div class="btns" id="eyeSw"></div>
+<div class="row">
+  <div><label>Аксессуар</label><select data-w="C" data-k="accessory"><option value="none">Без аксессуара</option><option value="bow">Бантик</option><option value="crown">Корона</option><option value="scarf">Шарфик</option><option value="flower">Цветочек</option></select></div>
+  <div><label>Цвет аксессуара</label><input type="color" data-w="C" data-k="acc"></div>
+</div>
+<label>Размер котика (высота, px, 120-420)</label><input type="number" data-w="C" data-k="size">
+<label>Фраза в облачке (пусто = без облачка)</label><input type="text" data-w="C" data-k="bubble">
+
+<h2>Котик: появление</h2>
+<div class="row">
+  <div><label>Сколько котиков сразу (1-5)</label><input type="number" data-w="C" data-k="count"></div>
+  <div><label>Где появляются</label><select data-w="C" data-k="place"><option value="center">По центру</option><option value="left">Слева</option><option value="right">Справа</option><option value="random">Каждый раз случайно</option></select></div>
+</div>
+<label class="chk"><input type="checkbox" data-w="C" data-k="varyColors"> Если котиков несколько, сделать их разных цветов</label>
+<div class="row">
+  <div><label>Первое появление через, сек</label><input type="number" data-w="C" data-k="firstDelay"></div>
+  <div><label>Сколько раз появиться (0 = всегда)</label><input type="number" data-w="C" data-k="rounds"></div>
+</div>
+<div class="row">
+  <div><label>Сидит на экране, сек</label><input type="number" data-w="C" data-k="showFor"></div>
+  <div><label>Пауза до следующего, сек</label><input type="number" data-w="C" data-k="hideFor"></div>
+</div>
+<div class="row">
+  <div><label>Как появляется</label><select data-w="C" data-k="enter"><option value="rise">Выпрыгивает снизу</option><option value="peek">Выглядывает сбоку</option><option value="drop">Падает сверху</option><option value="pop">Появляется с хлопком</option></select></div>
+  <div><label>Как исчезает</label><select data-w="C" data-k="exit"><option value="fade">Растворяется сердечками</option><option value="sink">Прячется вниз</option><option value="shrink">Крутится и исчезает</option><option value="slide">Убегает в сторону</option></select></div>
+</div>
+<label>Машет лапкой или радостно прыгает, сек (0 = нет)</label><input type="number" data-w="C" data-k="waveSec">
+<button class="main" onclick="send('C')">Применить на эфире</button>
+<div class="btns">
+  <button onclick="send('C',{visible:true,now:Date.now()})">Показать котика сейчас</button>
+  <button onclick="send('C',{visible:false})">Скрыть</button>
+</div>
+
 <script>
 const D = {
   L:{title:"Kitty", subtitle:"stream ♡", label:"лайков на эфире", goalTitle:"Цель", target:10000, step:5000, autoNext:true,
@@ -105,7 +156,10 @@ const D = {
   S:{title:"Kitty", subtitle:"stream ♡", mode:"list", seconds:4, showFor:20, hideFor:10, pink:"#ff8fc2", rose:"#ff4d94", visible:true,
      itemsText:"tiktok @kitty.stream\ninstagram @kitty.stream\ntelegram @kitty_stream"}
 };
-const SUF = {L:"-klk", S:"-kso"};
+D.C = {shape:"ref", coat:"#fffdfa", pattern:"none", eyes:"#2b1b22", accessory:"none", acc:"#ff6fa8", size:230, wink:true, ledge:true, setCat:"all",
+  count:1, varyColors:false, place:"center", firstDelay:3, showFor:15, hideFor:20, rounds:0, enter:"rise", exit:"fade",
+  waveSec:3, bubble:"Мяу! Привет!", visible:true, now:0};
+const SUF = {L:"-klk", S:"-kso", C:"-kct"};
 const $ = id => document.getElementById(id);
 const q = new URLSearchParams(location.search);
 const T = q.get("t") || localStorage.getItem("kt_topic") || ("kt-" + Math.random().toString(36).slice(2, 12) + Math.random().toString(36).slice(2, 6));
@@ -114,9 +168,11 @@ const st = {
   L:Object.assign({}, D.L, JSON.parse(localStorage.getItem("kt_sL_" + T) || "{}")),
   S:Object.assign({}, D.S, JSON.parse(localStorage.getItem("kt_sS_" + T) || "{}"))
 };
+st.C = Object.assign({}, D.C, JSON.parse(localStorage.getItem("kt_sC_" + T) || "{}"));
 const base = u => new URL(u, location.href).href;
 $("l1").textContent = base("kitty-likes.html?t=" + T);
 $("l2").textContent = base("kitty-socials.html?t=" + T);
+$("l4").textContent = base("kitty-cat.html?t=" + T);
 $("l3").textContent = location.href.split("?")[0] + "?t=" + T;
 
 document.querySelectorAll("[data-w]").forEach(el => {
@@ -173,6 +229,18 @@ function connect(){
     bws.onerror = () => bws.close();
   } catch (e) { $("bstat").textContent = "Браузер не дал подключиться: " + e.message; setTimeout(connect, 5000); }
 }
+
+/* Котик: быстрые цвета */
+const cq = k => document.querySelector('[data-w="C"][data-k="' + k + '"]');
+function swatches(boxId, key, list){
+  const box = document.getElementById(boxId);
+  list.forEach(([name, col]) => {
+    const b = document.createElement("button"); b.textContent = name; b.style.cssText = "min-width:0;flex:0 0 auto;padding:8px 12px;font-size:13px;background:" + col + ";color:" + (parseInt(col.slice(1), 16) > 0x888888 ? "#5b1636" : "#fff");
+    b.onclick = () => { cq(key).value = col; }; box.appendChild(b);
+  });
+}
+swatches("coatSw", "coat", [["Белый","#fffdfa"],["Кремовый","#ecd9b8"],["Рыжий","#f2a65a"],["Серый","#9aa3ad"],["Чёрный","#3a3238"],["Розовый","#f6c9d8"],["Капучино","#c49a76"]]);
+swatches("eyeSw", "eyes", [["Чёрные","#2b1b22"],["Зелёные","#4fae6a"],["Голубые","#5aa9e6"],["Янтарные","#e0a030"],["Фиолетовые","#9b7be0"]]);
 </script>
 </body>
 </html>
